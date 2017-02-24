@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.VideoView;
@@ -28,10 +29,10 @@ public class RevelioMoviePlayerActivity extends Activity implements MediaPlayer.
 		setContentView(R.layout.activity_revelio_movie_player);
 		videoView = (VideoView)findViewById(R.id.video_view);
 
-		String path = "android.resource://" + getPackageName() + "/" + R.raw.eyeresh_dolphin;
+		String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getPath() + "/Camera/eyeresh_dolphin.mp4";
 		videoView.setOnPreparedListener(this);
 		videoView.setOnCompletionListener(this);
-		videoView.setVideoURI(Uri.parse(path));
+		videoView.setVideoPath(path);
 		videoView.getViewTreeObserver().addOnGlobalLayoutListener(
 
 				new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -41,7 +42,7 @@ public class RevelioMoviePlayerActivity extends Activity implements MediaPlayer.
 						videoViewWidth = videoView.getWidth();
 						videoViewHeight = videoView.getHeight();
 
-						resizeVideoView();
+						//resizeVideoView();
 
 						if (ApplicationUtils.hasJellyBean()) {
 							videoView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
@@ -66,15 +67,15 @@ public class RevelioMoviePlayerActivity extends Activity implements MediaPlayer.
 		super.onPause();
 
 		// TODO : Change to 2D mode here
-		videoView.stopPlayback();
 		NativeManager.setViewMode(ViewMode.TYPE_2D);
+		videoView.stopPlayback();
 	}
 
 	@Override
 	public void onPrepared(MediaPlayer mediaPlayer) {
 		videoWidth = mediaPlayer.getVideoWidth();
 		videoHeight = mediaPlayer.getVideoHeight();
-		resizeVideoView();
+		//resizeVideoView();
 	}
 
 	private void resizeVideoView() {
@@ -89,7 +90,7 @@ public class RevelioMoviePlayerActivity extends Activity implements MediaPlayer.
 					params.leftMargin = -(newVideoViewWidth - videoViewWidth) / 2;
 					videoView.setLayoutParams(params);
 				} else {
-					int newVideoViewHeight = (int) ((float) videoViewWidth *  videoRatio);
+					int newVideoViewHeight = (int) ((float) videoViewWidth / videoRatio);
 					FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(videoViewWidth, newVideoViewHeight);
 					params.topMargin = -(newVideoViewHeight - videoViewHeight) / 2;
 					videoView.setLayoutParams(params);
