@@ -29,10 +29,13 @@ public class RevelioMoviePlayerActivity extends Activity implements MediaPlayer.
 		setContentView(R.layout.activity_revelio_movie_player);
 		videoView = (VideoView)findViewById(R.id.video_view);
 
-		String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getPath() + "/Camera/eyeresh_dolphin.mp4";
+		//String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getPath() + "/Camera/eyeresh_dolphin.mp4";
+		final String path = "android.resource://" + getPackageName() + "/" + R.raw.eyeresh_dolphin;
+
+		videoView.setVideoURI(Uri.parse(path));
 		videoView.setOnPreparedListener(this);
 		videoView.setOnCompletionListener(this);
-		videoView.setVideoPath(path);
+//		videoView.setVideoPath(path);
 		videoView.getViewTreeObserver().addOnGlobalLayoutListener(
 
 				new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -42,7 +45,7 @@ public class RevelioMoviePlayerActivity extends Activity implements MediaPlayer.
 						videoViewWidth = videoView.getWidth();
 						videoViewHeight = videoView.getHeight();
 
-						//resizeVideoView();
+						resizeVideoView();
 
 						if (ApplicationUtils.hasJellyBean()) {
 							videoView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
@@ -75,7 +78,7 @@ public class RevelioMoviePlayerActivity extends Activity implements MediaPlayer.
 	public void onPrepared(MediaPlayer mediaPlayer) {
 		videoWidth = mediaPlayer.getVideoWidth();
 		videoHeight = mediaPlayer.getVideoHeight();
-		//resizeVideoView();
+		resizeVideoView();
 	}
 
 	private void resizeVideoView() {
