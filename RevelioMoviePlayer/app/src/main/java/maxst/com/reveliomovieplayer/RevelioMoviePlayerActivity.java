@@ -10,6 +10,9 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.VideoView;
 
+import com.maxst.revelio.NativeManager;
+import com.maxst.revelio.ViewMode;
+
 public class RevelioMoviePlayerActivity extends Activity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
 
 	private VideoView videoView;
@@ -54,7 +57,7 @@ public class RevelioMoviePlayerActivity extends Activity implements MediaPlayer.
 	protected void onResume() {
 		super.onResume();
 
-		// TODO : Change to 3D mode here
+		NativeManager.setViewMode(ViewMode.TYPE_SIDE_BY_SIDE);
 		videoView.start();
 	}
 
@@ -64,6 +67,7 @@ public class RevelioMoviePlayerActivity extends Activity implements MediaPlayer.
 
 		// TODO : Change to 2D mode here
 		videoView.stopPlayback();
+		NativeManager.setViewMode(ViewMode.TYPE_2D);
 	}
 
 	@Override
